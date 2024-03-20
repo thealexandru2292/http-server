@@ -25,7 +25,24 @@ server.on('request', (req, resp) => {
 //req - is a readable stream
 //resp - is a writable stream     
 
-    if(items[1] === 'friends')
+    if(req.method === 'POST' && items[1] === 'friends')
+    {
+        /* From browser console run this to POST a new friend: 
+        
+        fetch('http://localhost:3000/friends', 
+          {
+              method: 'POST',
+              body: JSON.stringify({id: 4, name: 'Elon Musk'})
+           }) */
+        req.on('data', (data) =>{
+            const friend = data.toString();
+
+            console.log('Request:', friend);
+
+            friends.push(JSON.parse(friend));
+        })
+    }
+    else if(req.method === 'GET' && items[1] === 'friends')
     {
        /*  resp.writeHead(200, {
             'Content-Type' : 'application/json',
@@ -46,7 +63,7 @@ server.on('request', (req, resp) => {
         }
         
     } 
-    else if (items[1] === 'messages') 
+    else if (req.method === 'GET' && items[1] === 'messages') 
     { 
         //resp.statusCode = 200; by default is 200
         resp.setHeader('Content-Type', 'text/html');
