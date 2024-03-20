@@ -36,11 +36,15 @@ server.on('request', (req, resp) => {
            }) */
         req.on('data', (data) =>{
             const friend = data.toString();
-
             console.log('Request:', friend);
-
             friends.push(JSON.parse(friend));
-        })
+        });
+
+         //MODIFY END POINT 
+            //when client send a request we get it through req and we can respond back to the client via resp and the data will flow back to req
+            //all we need to do is to pipe the response in the request
+            //from readable stream "req" we send data through a writable stream "resp" via pipe 
+        req.pipe(resp);
     }
     else if(req.method === 'GET' && items[1] === 'friends')
     {
